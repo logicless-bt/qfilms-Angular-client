@@ -12,7 +12,9 @@ const apiUrl = 'https://qfilms-e3cad25d1fad.herokuapp.com/';
 export class UserRegistrationService {
   // Inject the HttpClient module to the constructor params
  // This will provide HttpClient to the entire class, making it available via this.http
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient
+  ) {
   }
  // Making the api call for the user registration endpoint
   public userRegistration(userDetails: any): Observable<any> {
