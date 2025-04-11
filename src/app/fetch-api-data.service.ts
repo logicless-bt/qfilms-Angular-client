@@ -37,6 +37,19 @@ export class UserRegistrationService {
     );
   }
 
+  //Api call to get user data
+  public getUserData(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const username = localStorage.getItem('user');
+    return this.http
+      .get(apiUrl + `users/${username}`, {
+        headers: new HttpHeaders({
+          Authorization: 'Bearer ' + token,
+        }),
+      })
+      .pipe(catchError(this.handleError));
+  }
+
   //access all movies
   public getAllMovies(): Observable<any> {
     const token = localStorage.getItem('token');

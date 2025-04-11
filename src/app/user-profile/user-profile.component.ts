@@ -5,6 +5,7 @@ import { UserRegistrationService } from '../fetch-api-data.service';
 import { Router } from '@angular/router';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MovieDialogComponent} from '../movie-dialog/movie-dialog.component'
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-user-profile',
@@ -18,15 +19,30 @@ export class UserProfileComponent implements OnInit {
   favMovies: any[] = [];
   movies: any[] = [];
   newPassword: any = "";
+  editForm: FormGroup;
+  isEditing: boolean = false;
+  isLoading: boolean = true;
 
   constructor(
     public fetchApiData: UserRegistrationService,
     public dialog: MatDialog,
-  ) { }
+    private formBuilder: FormBuilder,
+  ) {
+    this.editForm = this.formBuilder.group({
+      Username: [''],
+      Password: [''],
+      Email: [''],
+      Birthday: [''],
+    });
+   }
 
   ngOnInit(): void {
-    this.fetchApiData.getUser(),
-    this.fetchApiData.getAllMovies()
+    this.fetchApiData.getUserData().subscribe((resp: any) => {
+      this.userData = resp;
+      console.log('User data:', this.userData); // Debug user data
+      // Once user data is loaded, fetch and filter favorite movies
+      this.loadFavoriteMovies();
+    });
   }
 
   openDialog(type: string, data: any): void {
@@ -70,8 +86,8 @@ export class UserProfileComponent implements OnInit {
    */
   saveChanges(): void {
     if (this.editForm.valid) {
-      this.editUserService
-        .editUser(this.editForm.value)
+      this.fetchApiData
+        .editUserDetails(this.user, this.editForm.value)
         .subscribe((resp: any) => {
           // console.log(resp);
           this.isEditing = false;
@@ -111,7 +127,7 @@ export class UserProfileComponent implements OnInit {
    * On success, the user is logged out and redirected to the login or home page.
    */
   deleteProfile(): void {
-    this.fetchApiData.deleteUserDetails(user).subscribe(
+    this.fetchApiData.deleteUserDetails(this.user).subscribe(
       () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');

@@ -2,18 +2,18 @@
 <mat-dialog-content>
     <!-- Genre Details -->
     <div *ngIf="type === 'genre'">
-        <p><strong>Genre:</strong> {{ data?.Name }}</p>
-        <p><strong>Description:</strong> {{ data?.Description || 'No description available.' }}</p>
+        <p><strong>Genre:</strong> {{ data?.Genre.Name }}</p>
+        <p><strong>Description:</strong> {{ data?.Genre.Description || 'No description available.' }}</p>
     </div>
 
     <!-- Director Details -->
     <div *ngIf="type === 'director'">
-        <p><strong>Director:</strong> {{ data?.Name }}</p>
+        <p><strong>Director:</strong> {{ data?.Director.Name }}</p>
         <p><strong>Bio:</strong> {{ data?.Bio || 'No biography available.' }}</p>
     </div>
 
     <!-- Synopsis -->
-    <div *ngIf="type === 'synopsis'">
+    <div *ngIf="type === 'summary'">
         <p>{{ data?.Description || 'No synopsis available.' }}</p>
     </div>
 
